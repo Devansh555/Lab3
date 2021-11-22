@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require("express-session");
 //creating app
 const app = express();
 //handling static HTML and EJS templates
@@ -8,6 +9,23 @@ app.set('view engine', 'ejs');
 //route for home
 app.get('/', (req, res) => {
  res.render('index'); //no need for ejs extension
+});
+
+// The login and register part
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'test',
+  resave: true,
+  saveUninitialized: true
+}));
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+app.get("/register", (req, res) => {
+
+    res.render("register");
+
 });
 
 //route for contacts
