@@ -6,12 +6,12 @@ const loginControl = (request, response) => {
   let username = request.body.username;
   let password = request.body.password;
   if (!username || !password) {
-    response.render("login_result", {
+    response.render("loginRes", {
       result: "Please type in a valid username or password",
     });
   } else {
     if (request.session && request.session.user) {
-      response.render("login_result", { result: "Already logged in!" });
+      response.render("loginRes", { result: "Already logged in!" });
     } else {
       clientServices.loginService(
         username,
@@ -20,14 +20,14 @@ const loginControl = (request, response) => {
           console.log("Client from login service :" + JSON.stringify(client));
           if (client === null) {
             console.log("Auhtentication problem!");
-            response.render("login_result", { result: "Login failed" });
+            response.render("loginRes", { result: "Login failed" });
           } else {
             console.log("User from login service :" + client[0].num_client);
             //add to session
             request.session.user = username;
             request.session.num_client = client[0].num_client;
             request.session.admin = false;
-            response.render("login_result", {
+            response.render("loginRes", {
               result: `Login successful! (Username: ${username}, ID: ${client[0].num_client})`,
             });
           }
@@ -69,15 +69,13 @@ const registerControl = (request, response) => {
     if (err) {
     } else if (exists) {
       console.log("Username taken!");
-      response.render("register_result", {
+      response.render("registerRes", {
         result: `Registration failed. Username (${username}) already taken!`,
       });
     } else {
       client.num_client = insertedID;
       console.log(`Registration (${username}, ${insertedID}) successful!`);
-      response.render("register_result", {
-        result: `Successful registration ${client.contact} (ID: ${client.num_client})!`,
-      });
+      response.render("login.ejs");
     }
     response.end();
   });
