@@ -75,7 +75,9 @@ const registerControl = (request, response) => {
     } else {
       client.num_client = insertedID;
       console.log(`Registration (${username}, ${insertedID}) successful!`);
-      response.render("login.ejs");
+      response.render("registerRes", {
+        result: `Registration successful!`,
+      });
     }
     response.end();
   });
