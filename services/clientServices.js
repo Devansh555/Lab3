@@ -97,17 +97,22 @@ const searchUsername = function(username, callback) {
 }
 
 const searchNumclientService = function(num_client, callback) {
-    clientDAO.findByNumclient(num_client,function(err, rows) {
-        if (err) {
-            throw err;
-        }
-        if (rows.length == 0) {
-            console.log("No client with that id!");
-        } else {
-            callback(null, rows);
-        }
-    });
+ 
+  clientDAO.findByNumclient(num_client, function(err, rows) {
+      if (err) {
+          throw err;
+      }
+      if (rows.length == 0) {
+          console.log("Unkown client!");
+          let client = null;
+          callback(null, client);
+      } else {
+          //return the retrieved client 
+          callback(null, rows[0]);
+      }
+  });
 };
+
 
 const deleteService = function(num_client, callback) {
     clientDAO.findByNumclient(num_client,function(err, rows) {
@@ -122,11 +127,30 @@ const deleteService = function(num_client, callback) {
     });
 };
 
+const searchUsernameService = function(num_client, callback) {
+    
+  clientDAO.findNumUsername(num_client, function(err, rows) {
+      if (err) {
+          throw err;
+      }
+      if (rows.length == 0) {
+          console.log("Unkown client!");
+          let client = null;
+          callback(null, client);
+      } else {
+          //rreturn the retrieved client 
+          callback(null, rows[0]);
+      }
+  });
+}
+
+
 module.exports = {
     loginService,
     registerService,
     searchNumclientService,
     searchUsername,
     searchService,
-    deleteService
+    deleteService,
+    searchUsernameService
 };

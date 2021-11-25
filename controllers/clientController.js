@@ -50,19 +50,7 @@ const registerControl = (request, response) => {
   let phone = request.body.phone;
   let fax = request.body.fax;
   let max_outstanding = request.body.max_outstanding;
-  let client = new Client(
-    username,
-    password,
-    0,
-    society,
-    contact,
-    addres,
-    zipcode,
-    city,
-    phone,
-    fax,
-    max_outstanding
-  );
+  let client = new Client(username, password, 0, society, contact, addres, zipcode, city, phone, fax,  max_outstanding  );
 
   clientServices.registerService(client, function (err, exists, insertedID) {
     console.log("User from register service :" + insertedID);
@@ -84,21 +72,25 @@ const registerControl = (request, response) => {
 };
 
 const getClients = (request, response) => {
-  const clientServices = require("../services/clientServices");
-  clientServices.searchService(function (err, rows) {
-    response.json(rows);
-    response.end();
+  const clientServices = require('../services/clientServices');
+  clientServices.searchService(function(err, rows) {
+      response.render('client', { clients: rows });
   });
 };
 
 const getClientByNumclient = (request, response) => {
-  const clientServices = require("../services/clientServices");
+  const clientServices = require('../services/clientServices');
   let num_client = request.params.num_client;
-  clientServices.searchNumclientService(num_client, function (err, rows) {
-    response.json(rows);
-    response.end();
+  let username;
+  clientServices.searchUsernameService(num_client, function(err, row){
+      username = row.username
+      clientServices.searchNumclientService(num_client, function(err, rows) {
+          console.log(rows);
+          response.render('clientdetails', { clients: rows, name : username });
+      });
   });
 };
+
 
 module.exports = {
   loginControl,

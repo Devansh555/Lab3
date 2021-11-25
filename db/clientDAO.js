@@ -4,9 +4,15 @@ const bcrypt = require("bcryptjs");
 //select all clients
 function find(callback) {
   var rows = null;
-  //put your code her to select clients and return the array
-  //....
-  callback(null, rows);
+  const selectClients = (`SELECT * from account;`);
+    database.getResult(selectClients, function(err, rows) {
+        if (!err) {
+            callback(null, rows);
+        } else {
+            console.log(err);
+            throw err;
+        }
+    });
 }
 
 function findByUsername(username, callback) {
@@ -86,12 +92,23 @@ function createClient(client, callback) {
     }
   });
 }
+function findNumUsername(num_client, callback) {
+  const selectClient = (`SELECT username from account where num_client like '${num_client}';`);
+  database.getResult(selectClient, function(err, rows) {
+      if (!err) {
+          callback(null, rows);
+      } else {
+          console.log(err);
+      }
+  });
+}
 module.exports = {
-  // find,
+  find,
   findByUsername,
   // findBySociety,
   findByNumclient,
   createClient,
   // deleteClient,
   // createInitialAccounts
+  findNumUsername
 };
